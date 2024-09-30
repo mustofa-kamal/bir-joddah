@@ -1,11 +1,32 @@
+// Import necessary modules
+import fs from 'fs';
+import path from 'path';
+import MainPage from './components/MainPage'; // Import the MainPage component
 
+// Define the type for the fetched people data
+interface Person {
+  name: string;
+  father_name: string;
+  mother_name: string;
+  home_address: string;
+  age: string;
+  profession: string;
+  incident_location: string;
+  incident_on: string;
+  bio_snippet: string;
+  image_urls: string[];
+}
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main>
-        <h1>my first next js app</h1>
-      </main>
-    </div>
-  );
+// Async function to fetch the JSON data
+async function getPeopleData(): Promise<Person[]> {
+  const filePath = path.join(process.cwd(), 'data', 'people.json');
+  const jsonData = fs.readFileSync(filePath, 'utf-8');
+  return JSON.parse(jsonData);
+}
+
+export default async function HomePage() {
+  const people: Person[] = await getPeopleData();
+
+  // Render the MainPage client component and pass the data
+  return <MainPage people={people} />;
 }
