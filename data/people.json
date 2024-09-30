@@ -1,0 +1,34 @@
+[
+    {
+      "name": "Abu Sayeed",
+      "father_name": "Maqbul Hossain",
+      "mother_name": "Monowara Begum",
+      "home_address": "Pirganj, Rangpur",
+      "age": 23,
+      "profession": "Student",
+      "incident_location": "Rangpur City, Rangpur",
+      "incident_on": "16/07/2024",
+      "bio_snippet": "Abu Sayed (died 16 July 2024) was a Bangladeshi student activist who was shot dead by the Bangladesh Police on 16 July 2024, while participating in the 2024 Bangladesh facist government resist movement.",
+      "biography": "Abu Sayed was a Bangladeshi student activist who was shot dead by the Bangladesh Police on 16 July 2024, while participating in the 2024 Bangladesh quota reform movement. Sayed was a student of Begum Rokeya University and was involved in the protest in front of the university when the police engaged in lathi charges and opened fire on the students. Abu Sayed grew up in Babanpur village of Pirganj Upazila of Rangpur (then part of Rajshahi). His father is Maqbul Hossain and his mother is Monowara Begum. He was the youngest of a family of six brothers and three sisters. He won a talent pool scholarship from the local Junuder Para Government Primary School in the fifth grade. Later, he passed SSC with a Golden GPA-5 from Khalashpir Bilateral High School.[citation needed] After completing SSC, he received a scholarship from the Babylon Group, called the Babylon Scholarship Program, to complete his college education. Then he passed HSC from Rangpur Government College with a GPA-5. Later, he was admitted to the English department at Begum Rokeya University. He was a 12th batch student in English Department of Begum Rokeya University.",
+      "image_urls": [
+        "https://i.imgur.com/Jpeajd9t.jpg"
+    
+      ]
+    },
+    {
+      "name": "Jane Smith",
+      "father_name": "Robert Smith",
+      "mother_name": "Monowara Begum",
+      "home_address": "5678 Oak Avenue, Los Angeles, CA 90001, USA",
+      "age": 28,
+      "profession": "Graphic Designer",
+      "incident_location": "Venice Beach, Los Angeles, CA, USA",
+      "incident_on": "16/07/2024",
+      "bio_snippet": "Jane Smith is a creative graphic designer with a love for digital art and branding. She has worked with major clients in fashion and retail.",
+      "image_urls": [
+        "https://i.imgur.com/Jpeajd9t.jpg"
+    
+      ]
+    }
+  ]
+  
