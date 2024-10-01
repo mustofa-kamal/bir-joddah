@@ -21,23 +21,73 @@ interface Person {
 interface PeopleListProps {
   people: Person[];
   searchQuery: string;
+  sortProperty: keyof Person;
 }
 
-export default function PeopleList({ people, searchQuery }: PeopleListProps) {
+export default function PeopleList({
+  people,
+  searchQuery,
+  sortProperty,
+}: PeopleListProps) {
   const filteredPeople = people.filter((person) => {
-
-  
     const searchLower = searchQuery.toLowerCase();
 
-    
-  
-   //if any value match then retun true
-    const isMatch = Object.values(person).some(value => value.includes(searchLower))
+    // Array of keys to search
+    const keysToSearch: (keyof Person)[] = [
+      'name',
+      'father_name',
+      'mother_name',
+      'home_city',
+      'home_district',
+      'incident_city',
+      'incident_district',
+      'profession',
+      'bio_snippet',
+      'age',
+      'incident_on',
+    ];
 
-    
-    return isMatch;
-  }) 
-  
+    // Map over the keys to get the corresponding values
+    const valuesToSearch = keysToSearch.map((key) => {
+      const value = person[key];
+      return value != null ? value.toString().toLowerCase() : '';
+    });
+
+    // Check if any value includes the search query
+    return valuesToSearch.some((value) => value.includes(searchLower));
+  });
+
+  // Sort the filtered people
+  const sortedPeople = [...filteredPeople].sort((a, b) => {
+    const prop = sortProperty;
+    const aValue = a[prop];
+    const bValue = b[prop];
+
+    // Handle undefined or null values
+    if (aValue == null && bValue != null) return -1;
+    if (aValue != null && bValue == null) return 1;
+    if (aValue == null && bValue == null) return 0;
+
+    // Handle number comparison
+    if (typeof aValue === 'number' && typeof bValue === 'number') {
+      return aValue - bValue;
+    }
+
+    // Handle date comparison
+    if (prop === 'incident_on') {
+      const aDate = new Date(aValue.toString());
+      const bDate = new Date(bValue.toString());
+      return aDate.getTime() - bDate.getTime();
+    }
+
+    // Handle string comparison
+    const aStr = aValue.toString().toLowerCase();
+    const bStr = bValue.toString().toLowerCase();
+
+    if (aStr < bStr) return -1;
+    if (aStr > bStr) return 1;
+    return 0;
+  });
 
   return (
     <div>
@@ -50,7 +100,7 @@ export default function PeopleList({ people, searchQuery }: PeopleListProps) {
 
       {filteredPeople.length > 0 ? (
         <ul className="space-y-8">
-          {filteredPeople.map((person, index) => (
+          {sortedPeople.map((person, index) => (
             <li key={index} className="relative">
               {/* Decorative Borders */}
               <div
