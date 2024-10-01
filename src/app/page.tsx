@@ -8,12 +8,15 @@ interface Person {
   name: string;
   father_name: string;
   mother_name: string;
-  home_address: string;
-  age: string;
+  home_city: string;
+  home_district: string;
+  age: number; // Number type for age
   profession: string;
-  incident_location: string;
-  incident_on: string;
+  incident_city: string;
+  incident_district: string;
+  incident_on: string; // ISO date string
   bio_snippet: string;
+  biography: string;
   image_urls: string[];
 }
 
