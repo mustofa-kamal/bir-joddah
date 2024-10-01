@@ -28,15 +28,14 @@ export default function PeopleList({ people, searchQuery }: PeopleListProps) {
 
   
     const searchLower = searchQuery.toLowerCase();
-  
-    // Convert all values to strings and include in an array
-    const valuesToSearch = [person.name, person.father_name, person.mother_name, person.home_city, person.home_district, person.incident_city, person.incident_district, person.profession, person.bio_snippet, person.age.toString(), person.incident_on];
 
+    
   
-    // Check if any value includes the search query
-    return valuesToSearch.some((value) =>
-      value.toLowerCase().includes( searchLower)
-    );
+   //if any value match then retun true
+    const isMatch = Object.values(person).some(value => value.includes(searchLower))
+
+    
+    return isMatch;
   }) 
   
 
