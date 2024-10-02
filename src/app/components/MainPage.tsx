@@ -237,20 +237,20 @@ export default function MainPage({ people }: MainPageProps) {
             ))}
           </select>
           {/* Results Count */}
-          <span className="font-bold text-gray-700 ml-4">
-            Results: {filteredPeople.length}
-          </span>
-        </div>
-
-        {/* Search Box Section */}
-        <div className="flex-grow sm:flex sm:justify-end">
-          <input
+          <span >
+            <input
             type="text"
             placeholder="Search..."
             className="p-2 border border-gray-300 rounded-md text-base w-full sm:w-40"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+          </span>
+        </div>
+
+        {/* Search Box Section */}
+        <div className="flex-1 sm:flex sm:justify-end">
+          {filteredPeople.length}
         </div>
       </div>
 

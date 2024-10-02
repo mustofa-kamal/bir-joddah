@@ -77,6 +77,9 @@ export default function PeopleList({ people }: PeopleListProps) {
                 {/* Detailed Information */}
                 <div className="text-left space-y-2">
                   <p>
+                    <strong>Name:</strong> {person.name}
+                  </p>
+                  <p>
                     <strong>Father's Name:</strong> {person.father_name}
                   </p>
                   <p>
