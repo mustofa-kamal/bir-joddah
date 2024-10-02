@@ -1,6 +1,6 @@
 'use client'; // Mark this as a client component
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PeopleList from './PeopleList';
 
 interface Person {
@@ -31,6 +31,8 @@ export default function MainPage({ people }: MainPageProps) {
   const [filterInput, setFilterInput] = useState('');
   const [appliedFilterProperty, setAppliedFilterProperty] = useState<string>('select_one');
   const [appliedFilterValue, setAppliedFilterValue] = useState<string>('');
+  const [filteredPeople, setFilteredPeople] = useState<Person[]>(people);
+  const [sortedPeople, setSortedPeople] = useState<Person[]>(people);
 
   // Properties available for sorting
   const propertiesToSortBy: string[] = [
@@ -90,10 +92,93 @@ export default function MainPage({ people }: MainPageProps) {
     setSelectedSortProperty(value);
   };
 
+  // Effect to handle filtering based on appliedFilterProperty and appliedFilterValue
+  useEffect(() => {
+    let updatedPeople = [...people];
+
+    // Apply Filter
+    if (appliedFilterProperty !== 'select_one' && appliedFilterValue.trim() !== '') {
+      updatedPeople = updatedPeople.filter((person) => {
+        const propValue = person[appliedFilterProperty as keyof Person];
+        if (propValue == null) return false;
+        return propValue.toString().toLowerCase().includes(appliedFilterValue.toLowerCase());
+      });
+    }
+
+    // Apply Search
+    if (searchQuery.trim() !== '') {
+      const searchLower = searchQuery.toLowerCase();
+      updatedPeople = updatedPeople.filter((person) => {
+        // Array of keys to search
+        const keysToSearch: (keyof Person)[] = [
+          'name',
+          'father_name',
+          'mother_name',
+          'home_city',
+          'home_district',
+          'incident_city',
+          'incident_district',
+          'profession',
+          'bio_snippet',
+          'age',
+          'incident_on',
+        ];
+
+        // Check if any key includes the search query
+        return keysToSearch.some((key) => {
+          const value = person[key];
+          return value != null && value.toString().toLowerCase().includes(searchLower);
+        });
+      });
+    }
+
+    setFilteredPeople(updatedPeople);
+  }, [people, appliedFilterProperty, appliedFilterValue, searchQuery]);
+
+  // Effect to handle sorting based on selectedSortProperty
+  useEffect(() => {
+    let sorted = [...filteredPeople];
+
+    if (selectedSortProperty !== 'select_one') {
+      sorted.sort((a, b) => {
+        const prop = selectedSortProperty as keyof Person;
+        const aValue = a[prop];
+        const bValue = b[prop];
+
+        // Handle undefined or null values
+        if (aValue == null && bValue != null) return -1;
+        if (aValue != null && bValue == null) return 1;
+        if (aValue == null && bValue == null) return 0;
+
+        // Handle number comparison
+        if (typeof aValue === 'number' && typeof bValue === 'number') {
+          return aValue - bValue;
+        }
+
+        // Handle date comparison
+        if (prop === 'incident_on') {
+          const aDate = new Date(aValue.toString());
+          const bDate = new Date(bValue.toString());
+          return aDate.getTime() - bDate.getTime();
+        }
+
+        // Handle string comparison
+        const aStr = aValue.toString().toLowerCase();
+        const bStr = bValue.toString().toLowerCase();
+
+        if (aStr < bStr) return -1;
+        if (aStr > bStr) return 1;
+        return 0;
+      });
+    }
+
+    setSortedPeople(sorted);
+  }, [filteredPeople, selectedSortProperty]);
+
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-0 space-y-6">
       {/* Top Controls: Filter By, Sort By, and Search Box */}
-      <div className="w-full p-4 bg-gray-200 border border-gray-300 rounded-md flex flex-wrap items-center space-y-4 sm:space-y-0 sm:space-x-6">
+      <div className="w-full p-4 bg-gray-200 border border-gray-300 flex flex-wrap items-center space-y-4 sm:space-y-0 sm:space-x-6">
         {/* Filter By Section */}
         <div className="flex items-center space-x-2">
           {/* Filter By Label */}
@@ -151,6 +236,10 @@ export default function MainPage({ people }: MainPageProps) {
               </option>
             ))}
           </select>
+          {/* Results Count */}
+          <span className="font-bold text-gray-700 ml-4">
+            Results: {filteredPeople.length}
+          </span>
         </div>
 
         {/* Search Box Section */}
@@ -158,7 +247,7 @@ export default function MainPage({ people }: MainPageProps) {
           <input
             type="text"
             placeholder="Search..."
-            className="p-2 border border-gray-300 rounded-md text-base w-full sm:w-64"
+            className="p-2 border border-gray-300 rounded-md text-base w-full sm:w-40"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -167,11 +256,7 @@ export default function MainPage({ people }: MainPageProps) {
 
       {/* People List */}
       <PeopleList
-        people={people}
-        searchQuery={searchQuery}
-        sortProperty={selectedSortProperty}
-        filterProperty={appliedFilterProperty}
-        filterValue={appliedFilterValue}
+        people={sortedPeople}
       />
     </div>
   );
