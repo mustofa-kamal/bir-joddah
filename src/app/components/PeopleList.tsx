@@ -21,73 +21,105 @@ interface Person {
 interface PeopleListProps {
   people: Person[];
   searchQuery: string;
-  sortProperty: keyof Person;
+  sortProperty: string; // Changed from keyof Person to string to include 'select_one'
+  filterProperty: string; // Can be 'select_one' or a valid key
+  filterValue: string;
 }
 
 export default function PeopleList({
   people,
   searchQuery,
   sortProperty,
+  filterProperty,
+  filterValue,
 }: PeopleListProps) {
+  // Apply search and filter
   const filteredPeople = people.filter((person) => {
     const searchLower = searchQuery.toLowerCase();
 
-    // Array of keys to search
-    const keysToSearch: (keyof Person)[] = [
-      'name',
-      'father_name',
-      'mother_name',
-      'home_city',
-      'home_district',
-      'incident_city',
-      'incident_district',
-      'profession',
-      'bio_snippet',
-      'age',
-      'incident_on',
-    ];
+    // Initialize search condition
+    let matchesSearch = true;
+    if (searchQuery.trim() !== '') {
+      // Array of keys to search
+      const keysToSearch: (keyof Person)[] = [
+        'name',
+        'father_name',
+        'mother_name',
+        'home_city',
+        'home_district',
+        'incident_city',
+        'incident_district',
+        'profession',
+        'bio_snippet',
+        'age',
+        'incident_on',
+      ];
 
-    // Map over the keys to get the corresponding values
-    const valuesToSearch = keysToSearch.map((key) => {
-      const value = person[key];
-      return value != null ? value.toString().toLowerCase() : '';
-    });
+      // Map over the keys to get the corresponding values
+      const valuesToSearch = keysToSearch.map((key) => {
+        const value = person[key];
+        return value != null ? value.toString().toLowerCase() : '';
+      });
 
-    // Check if any value includes the search query
-    return valuesToSearch.some((value) => value.includes(searchLower));
-  });
-
-  // Sort the filtered people
-  const sortedPeople = [...filteredPeople].sort((a, b) => {
-    const prop = sortProperty;
-    const aValue = a[prop];
-    const bValue = b[prop];
-
-    // Handle undefined or null values
-    if (aValue == null && bValue != null) return -1;
-    if (aValue != null && bValue == null) return 1;
-    if (aValue == null && bValue == null) return 0;
-
-    // Handle number comparison
-    if (typeof aValue === 'number' && typeof bValue === 'number') {
-      return aValue - bValue;
+      // Check if any value includes the search query
+      matchesSearch = valuesToSearch.some((value) => value.includes(searchLower));
     }
 
-    // Handle date comparison
-    if (prop === 'incident_on') {
-      const aDate = new Date(aValue.toString());
-      const bDate = new Date(bValue.toString());
-      return aDate.getTime() - bDate.getTime();
+    // Initialize filter condition
+    let matchesFilter = true;
+    if (filterProperty !== 'select_one' && filterValue.trim() !== '') {
+      const filterProp = filterProperty as keyof Person;
+      const propValue = person[filterProp];
+
+      if (propValue != null) {
+        // Convert to string for comparison
+        const propValueStr = propValue.toString().toLowerCase();
+        const filterValueLower = filterValue.toLowerCase();
+
+        matchesFilter = propValueStr.includes(filterValueLower);
+      } else {
+        matchesFilter = false;
+      }
     }
 
-    // Handle string comparison
-    const aStr = aValue.toString().toLowerCase();
-    const bStr = bValue.toString().toLowerCase();
-
-    if (aStr < bStr) return -1;
-    if (aStr > bStr) return 1;
-    return 0;
+    // Return true only if both search and filter conditions are met
+    return matchesSearch && matchesFilter;
   });
+
+  // Sort the filtered people only if sortProperty is not 'select_one'
+  const sortedPeople =
+    sortProperty !== 'select_one'
+      ? [...filteredPeople].sort((a, b) => {
+          const prop = sortProperty as keyof Person;
+          const aValue = a[prop];
+          const bValue = b[prop];
+
+          // Handle undefined or null values
+          if (aValue == null && bValue != null) return -1;
+          if (aValue != null && bValue == null) return 1;
+          if (aValue == null && bValue == null) return 0;
+
+          // Handle number comparison
+          if (typeof aValue === 'number' && typeof bValue === 'number') {
+            return aValue - bValue;
+          }
+
+          // Handle date comparison
+          if (prop === 'incident_on') {
+            const aDate = new Date(aValue.toString());
+            const bDate = new Date(bValue.toString());
+            return aDate.getTime() - bDate.getTime();
+          }
+
+          // Handle string comparison
+          const aStr = aValue.toString().toLowerCase();
+          const bStr = bValue.toString().toLowerCase();
+
+          if (aStr < bStr) return -1;
+          if (aStr > bStr) return 1;
+          return 0;
+        })
+      : filteredPeople; // If 'select_one', keep the original order
 
   return (
     <div>
@@ -156,8 +188,7 @@ export default function PeopleList({
                     <strong>Mother's Name:</strong> {person.mother_name}
                   </p>
                   <p>
-                    <strong>Home Address:</strong> {person.home_city},{" "}
-                    {person.home_district}
+                    <strong>Home Address:</strong> {person.home_city}, {person.home_district}
                   </p>
                   <p>
                     <strong>Age:</strong> {person.age}
@@ -166,8 +197,7 @@ export default function PeopleList({
                     <strong>Profession:</strong> {person.profession}
                   </p>
                   <p>
-                    <strong>Died at:</strong> {person.incident_city},{" "}
-                    {person.incident_district}
+                    <strong>Died at:</strong> {person.incident_city}, {person.incident_district}
                   </p>
                   <p>
                     <strong>Died on:</strong> {person.incident_on}

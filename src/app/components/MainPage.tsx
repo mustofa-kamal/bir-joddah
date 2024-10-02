@@ -1,4 +1,4 @@
-'use client';
+'use client'; // Mark this as a client component
 
 import { useState } from 'react';
 import PeopleList from './PeopleList';
@@ -9,11 +9,11 @@ interface Person {
   mother_name: string;
   home_city: string;
   home_district: string;
-  age: number;
+  age: number; // Number type for age
   profession: string;
   incident_city: string;
   incident_district: string;
-  incident_on: string;
+  incident_on: string; // ISO date string
   bio_snippet: string;
   biography: string;
   image_urls: string[];
@@ -24,10 +24,17 @@ interface MainPageProps {
 }
 
 export default function MainPage({ people }: MainPageProps) {
+  // State variables for search, sort, and filter
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedSortProperty, setSelectedSortProperty] = useState<keyof Person>('name');
+  const [selectedSortProperty, setSelectedSortProperty] = useState<string>('select_one');
+  const [selectedFilterProperty, setSelectedFilterProperty] = useState<string>('select_one');
+  const [filterInput, setFilterInput] = useState('');
+  const [appliedFilterProperty, setAppliedFilterProperty] = useState<string>('select_one');
+  const [appliedFilterValue, setAppliedFilterValue] = useState<string>('');
 
-  const propertiesToSortBy: (keyof Person)[] = [
+  // Properties available for sorting
+  const propertiesToSortBy: string[] = [
+    'select_one', // Added "Select one" as the first option
     'name',
     'father_name',
     'mother_name',
@@ -40,6 +47,21 @@ export default function MainPage({ people }: MainPageProps) {
     'incident_on',
   ];
 
+  // Properties available for filtering (excluding 'bio_snippet', 'biography', 'image_urls')
+  const propertiesToFilterBy: string[] = [
+    'name',
+    'father_name',
+    'mother_name',
+    'home_city',
+    'home_district',
+    'age',
+    'profession',
+    'incident_city',
+    'incident_district',
+    'incident_on',
+  ];
+
+  // Helper function to format property names from snake_case to Title Case
   function formatPropertyName(propName: string): string {
     return propName
       .split('_')
@@ -47,59 +69,109 @@ export default function MainPage({ people }: MainPageProps) {
       .join(' ');
   }
 
+  // Handle the "Go" button click for filtering
+  const handleGoFilter = () => {
+    if (
+      selectedFilterProperty !== 'select_one' &&
+      filterInput.trim() !== ''
+    ) {
+      setAppliedFilterProperty(selectedFilterProperty);
+      setAppliedFilterValue(filterInput.trim());
+    } else {
+      // Reset filter if "Select one" is chosen or input is empty
+      setAppliedFilterProperty('select_one');
+      setAppliedFilterValue('');
+    }
+  };
+
+  // Handle the "Sort By" change
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setSelectedSortProperty(value);
+  };
+
   return (
-    <div className="space-y-1 p-0">
-      {/* Menu at the top */}
-      <div className="w-full p-2.5 bg-gray-200 border border-gray-300 flex items-center">
-        {/* Menu content */}
-        <nav className="flex space-x-4 items-center">
-          {/* Select Component */}
-          <label htmlFor="sortSelect" className="text-gray-700 mr-2">
-            Sort by:
+    <div className="p-6 space-y-6">
+      {/* Top Controls: Filter By, Sort By, and Search Box */}
+      <div className="w-full p-4 bg-gray-200 border border-gray-300 rounded-md flex flex-wrap items-center space-y-4 sm:space-y-0 sm:space-x-6">
+        {/* Filter By Section */}
+        <div className="flex items-center space-x-2">
+          {/* Filter By Label */}
+          <label htmlFor="filterSelect" className="text-gray-700">
+            Filter by:
           </label>
+          {/* Filter By Select */}
           <select
-            id="sortSelect"
-            value={selectedSortProperty}
-            onChange={(e) => setSelectedSortProperty(e.target.value as keyof Person)}
+            id="filterSelect"
+            value={selectedFilterProperty}
+            onChange={(e) => setSelectedFilterProperty(e.target.value)}
             className="p-2 border border-gray-300 rounded-md text-base"
           >
-            {propertiesToSortBy.map((prop) => (
+            <option value="select_one">Select one</option>
+            {propertiesToFilterBy.map((prop) => (
               <option key={prop} value={prop}>
                 {formatPropertyName(prop)}
               </option>
             ))}
           </select>
-          {/* Existing menu items */}
-          <a href="/" className="text-gray-700 hover:text-gray-900">
-            Home
-          </a>
-          <a href="/about" className="text-gray-700 hover:text-gray-900">
-            About
-          </a>
-          <a href="/contact" className="text-gray-700 hover:text-gray-900">
-            Contact
-          </a>
-          {/* Add more menu items as needed */}
-        </nav>
-        {/* Spacer to push the search box to the right */}
-        <div className="flex-grow"></div>
-        {/* Search Box on the right */}
-        <div className="text-right">
+          {/* Filter Input Box */}
+          <input
+            type="text"
+            placeholder="Enter value..."
+            className="p-2 border border-gray-300 rounded-md text-base w-40"
+            value={filterInput}
+            onChange={(e) => setFilterInput(e.target.value)}
+          />
+          {/* Go Button */}
+          <button
+            onClick={handleGoFilter}
+            className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          >
+            Go
+          </button>
+        </div>
+
+        {/* Sort By Section */}
+        <div className="flex items-center space-x-2">
+          {/* Sort By Label */}
+          <label htmlFor="sortSelect" className="text-gray-700">
+            Sort by:
+          </label>
+          {/* Sort By Select */}
+          <select
+            id="sortSelect"
+            value={selectedSortProperty}
+            onChange={handleSortChange}
+            className="p-2 border border-gray-300 rounded-md text-base"
+          >
+            <option value="select_one">Select one</option>
+            {propertiesToSortBy.slice(1).map((prop) => ( // Exclude 'select_one' from being repeated
+              <option key={prop} value={prop}>
+                {formatPropertyName(prop)}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Search Box Section */}
+        <div className="flex-grow sm:flex sm:justify-end">
           <input
             type="text"
             placeholder="Search..."
-            className="p-2 border border-gray-300 rounded-md text-base w-64"
+            className="p-2 border border-gray-300 rounded-md text-base w-full sm:w-64"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
       </div>
 
-      {/* Pass the people data and searchQuery to the PeopleList component */}
+      {/* People List */}
       <PeopleList
         people={people}
         searchQuery={searchQuery}
         sortProperty={selectedSortProperty}
+        filterProperty={appliedFilterProperty}
+        filterValue={appliedFilterValue}
       />
     </div>
   );
