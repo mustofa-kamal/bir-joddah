@@ -92,6 +92,15 @@ export default function MainPage({ people }: MainPageProps) {
     setSelectedSortProperty(value);
   };
 
+  // Effect to auto-reset filter when filterInput is cleared
+  useEffect(() => {
+  if (filterInput.trim() === '') {
+    setAppliedFilterProperty('select_one');
+    setAppliedFilterValue('');
+  }
+  }, [filterInput]);
+
+
   // Effect to handle filtering based on appliedFilterProperty and appliedFilterValue
   useEffect(() => {
     let updatedPeople = [...people];
