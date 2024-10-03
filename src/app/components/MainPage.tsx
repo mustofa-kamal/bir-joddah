@@ -110,7 +110,18 @@ export default function MainPage({ people }: MainPageProps) {
       updatedPeople = updatedPeople.filter((person) => {
         const propValue = person[appliedFilterProperty as keyof Person];
         if (propValue == null) return false;
-        return propValue.toString().toLowerCase().includes(appliedFilterValue.toLowerCase());
+        
+
+        const propStr = propValue.toString().toLowerCase();
+        const filterStr = appliedFilterValue.toString().toLowerCase();
+
+        // Exact match comparison if propValue and appliedFilterValue are numbers
+        if (!isNaN(Number(propValue)) && !isNaN(Number(appliedFilterValue))) {
+          return Number(propValue) === Number(appliedFilterValue);
+        }
+        // Otherwise, fallback to string includes
+        return propStr.includes(filterStr);
+
       });
     }
 
