@@ -28,7 +28,7 @@ export default function PeopleList({ people }: PeopleListProps) {
       {people.length > 0 ? (
         <ul className="space-y-8">
           {people.map((person, index) => (
-            <li key={index} className="relative">
+            <li key={index} className="relative border border-gray-200 p-4 rounded-md">
               {/* Decorative Borders */}
               <div
                 className="absolute top-0 left-0 right-0 h-4 bg-repeat-x"
@@ -58,51 +58,56 @@ export default function PeopleList({ people }: PeopleListProps) {
                     "url('/images/flower-border-vertical.jpeg')",
                 }}
               ></div>
+
               {/* Content */}
               <div className="relative pt-10 pb-10 pl-10 pr-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* First Column: Image and Image Title */}
+
+                  
+              
+
+              <div className="relative" >
                 {/* Image and Name at the Top, Centered */}
-                <div className="text-center mb-4">
+                <div className="text-center" >
                   <Image
                     src={person.image_urls[0]}
                     alt={`Image of ${person.name}`}
-                    className="w-12 h-12 rounded-full mx-auto"
+                    className="w-100 h-100  mx-auto"
                     title={person.name}
-                    width={50}
-                    height={50}
+                    width={100}
+                    height={100}
                   />
                   <h2 className="text-2xl font-semibold mt-2">
                     {person.name}
                   </h2>
                 </div>
-                {/* Detailed Information */}
-                <div className="text-left space-y-2">
-                  <p>
-                    <strong>Name:</strong> {person.name}
-                  </p>
-                  <p>
-                    <strong>Father's Name:</strong> {person.father_name}
-                  </p>
-                  <p>
-                    <strong>Mother's Name:</strong> {person.mother_name}
-                  </p>
-                  <p>
-                    <strong>Home Address:</strong> {person.home_city}, {person.home_district}
-                  </p>
-                  <p>
-                    <strong>Age:</strong> {person.age}
-                  </p>
-                  <p>
-                    <strong>Profession:</strong> {person.profession}
-                  </p>
-                  <p>
-                    <strong>Died at:</strong> {person.incident_city}, {person.incident_district}
-                  </p>
-                  <p>
-                    <strong>Died on:</strong> {person.incident_on}
-                  </p>
-                  <p>
-                    <strong>Bio Snippet:</strong> {person.bio_snippet}
-                  </p>
+                </div>
+
+
+
+                  
+
+                  
+                  {/* First Column: Name, Father's Name, Mother's Name, Home Address, Age */}
+                  <div className="space-y-2">
+                    <p><strong>Name:</strong> {person.name}</p>
+                    <p><strong>Father's Name:</strong> {person.father_name}</p>
+                    <p><strong>Mother's Name:</strong> {person.mother_name}</p>
+                    <p><strong>Home Address:</strong> {person.home_city}, {person.home_district}</p>
+                    <p><strong>Age:</strong> {person.age}</p>
+                  </div>
+
+                  {/* Second Column: Profession, Died at, Died on, Bio Snippet */}
+                  <div className="space-y-2">
+                    <p><strong>Profession:</strong> {person.profession}</p>
+                    <p><strong>Died at:</strong> {person.incident_city}, {person.incident_district}</p>
+                    <p><strong>Died on:</strong> {person.incident_on}</p>
+                    <p><strong>Bio Snippet:</strong> {person.bio_snippet}</p>
+                  </div>
+
+                
+                 
                 </div>
               </div>
             </li>
