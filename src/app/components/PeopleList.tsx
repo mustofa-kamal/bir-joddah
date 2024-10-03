@@ -61,35 +61,25 @@ export default function PeopleList({ people }: PeopleListProps) {
 
               {/* Content */}
               <div className="relative pt-10 pb-10 pl-10 pr-8">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Four-column Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                  
                   {/* First Column: Image and Image Title */}
+                  <div className="text-center">
+                    <Image
+                      src={person.image_urls[0]}
+                      alt={`Image of ${person.name}`}
+                      className="w-100 h-100 mx-auto"
+                      title={person.name}
+                      width={100}
+                      height={100}
+                    />
+                    <h2 className="text-2xl font-semibold mt-2">
+                      {person.name}
+                    </h2>
+                  </div>
 
-                  
-              
-
-              <div className="relative" >
-                {/* Image and Name at the Top, Centered */}
-                <div className="text-center" >
-                  <Image
-                    src={person.image_urls[0]}
-                    alt={`Image of ${person.name}`}
-                    className="w-100 h-100  mx-auto"
-                    title={person.name}
-                    width={100}
-                    height={100}
-                  />
-                  <h2 className="text-2xl font-semibold mt-2">
-                    {person.name}
-                  </h2>
-                </div>
-                </div>
-
-
-
-                  
-
-                  
-                  {/* First Column: Name, Father's Name, Mother's Name, Home Address, Age */}
+                  {/* Second Column: Name, Father's Name, Mother's Name, Home Address, Age */}
                   <div className="space-y-2">
                     <p><strong>Name:</strong> {person.name}</p>
                     <p><strong>Father's Name:</strong> {person.father_name}</p>
@@ -98,16 +88,18 @@ export default function PeopleList({ people }: PeopleListProps) {
                     <p><strong>Age:</strong> {person.age}</p>
                   </div>
 
-                  {/* Second Column: Profession, Died at, Died on, Bio Snippet */}
+                  {/* Third Column: Profession, Died at, Died on */}
                   <div className="space-y-2">
                     <p><strong>Profession:</strong> {person.profession}</p>
                     <p><strong>Died at:</strong> {person.incident_city}, {person.incident_district}</p>
                     <p><strong>Died on:</strong> {person.incident_on}</p>
+                  </div>
+
+                  {/* Fourth Column: Bio Snippet */}
+                  <div className="space-y-2">
                     <p><strong>Bio Snippet:</strong> {person.bio_snippet}</p>
                   </div>
 
-                
-                 
                 </div>
               </div>
             </li>
