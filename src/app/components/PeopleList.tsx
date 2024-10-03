@@ -14,7 +14,6 @@ interface Person {
   incident_district: string;
   incident_on: string;
   bio_snippet: string;
-  biography: string;
   image_urls: string[];
 }
 
@@ -61,8 +60,8 @@ export default function PeopleList({ people }: PeopleListProps) {
 
               {/* Content */}
               <div className="relative pt-10 pb-10 pl-10 pr-8">
-                {/* Four-column Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                {/* Responsive Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
                   
                   {/* First Column: Image and Image Title */}
                   <div className="text-center">
@@ -85,18 +84,18 @@ export default function PeopleList({ people }: PeopleListProps) {
                     <p><strong>Father's Name:</strong> {person.father_name}</p>
                     <p><strong>Mother's Name:</strong> {person.mother_name}</p>
                     <p><strong>Home Address:</strong> {person.home_city}, {person.home_district}</p>
-                    <p><strong>Age:</strong> {person.age}</p>
                   </div>
 
                   {/* Third Column: Profession, Died at, Died on */}
                   <div className="space-y-2">
+                    <p><strong>Age:</strong> {person.age}</p>
                     <p><strong>Profession:</strong> {person.profession}</p>
                     <p><strong>Died at:</strong> {person.incident_city}, {person.incident_district}</p>
                     <p><strong>Died on:</strong> {person.incident_on}</p>
                   </div>
 
                   {/* Fourth Column: Bio Snippet */}
-                  <div className="space-y-2">
+                  <div className="space-y-2 md:col-span-2">
                     <p><strong>Bio Snippet:</strong> {person.bio_snippet}</p>
                   </div>
 
