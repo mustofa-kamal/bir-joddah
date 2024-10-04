@@ -1,35 +1,30 @@
-// Import necessary modules
-import fs from 'fs';
-import path from 'path';
-import MainPage from './components/MainPage'; // Import the MainPage component
+import MainPage from './components/MainPage';
 
-// Define the type for the fetched people data
 interface Person {
   name: string;
   father_name: string;
   mother_name: string;
   home_city: string;
   home_district: string;
-  age: number; // Number type for age
+  age: number;
   profession: string;
   incident_city: string;
   incident_district: string;
-  incident_on: string; // ISO date string
+  incident_on: string;
   bio_snippet: string;
   biography: string;
   image_urls: string[];
 }
 
-// Async function to fetch the JSON data
-async function getPeopleData(): Promise<Person[]> {
-  const filePath = path.join(process.cwd(), 'data', 'people.json');
-  const jsonData = fs.readFileSync(filePath, 'utf-8');
-  return JSON.parse(jsonData);
+async function getPeopleData(page: number = 1, limit: number = 20): Promise<{ people: Person[]; total: number }> {
+  const res = await fetch(`http://localhost:3000/api/people?page=${page}&limit=${limit}`);
+  const data = await res.json();
+  return { people: data.people, total: data.total };
 }
 
 export default async function HomePage() {
-  const people: Person[] = await getPeopleData();
+  const { people, total } = await getPeopleData(); // Fetch initial data
 
-  // Render the MainPage client component and pass the data
-  return <MainPage people={people} />;
+  return <MainPage people={people} total={total} />;
 }
+

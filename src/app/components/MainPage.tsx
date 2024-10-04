@@ -9,11 +9,11 @@ interface Person {
   mother_name: string;
   home_city: string;
   home_district: string;
-  age: number; // Number type for age
+  age: number;
   profession: string;
   incident_city: string;
   incident_district: string;
-  incident_on: string; // ISO date string
+  incident_on: string;
   bio_snippet: string;
   biography: string;
   image_urls: string[];
@@ -21,22 +21,27 @@ interface Person {
 
 interface MainPageProps {
   people: Person[];
+  total: number;
 }
 
-export default function MainPage({ people }: MainPageProps) {
-  // State variables for search, sort, and filter
+export default function MainPage({ people: initialPeople, total }: MainPageProps) {
+  // State variables for pagination, search, sort, and filter
+  const [people, setPeople] = useState<Person[]>(initialPeople); // Holds the list of people
+  const [page, setPage] = useState<number>(1); // Current page
+  const [limit] = useState<number>(20); // Number of items per page
+  const [totalPeople, setTotalPeople] = useState<number>(total); // Total number of people
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSortProperty, setSelectedSortProperty] = useState<string>('select_one');
   const [selectedFilterProperty, setSelectedFilterProperty] = useState<string>('select_one');
   const [filterInput, setFilterInput] = useState('');
   const [appliedFilterProperty, setAppliedFilterProperty] = useState<string>('select_one');
   const [appliedFilterValue, setAppliedFilterValue] = useState<string>('');
-  const [filteredPeople, setFilteredPeople] = useState<Person[]>(people);
-  const [sortedPeople, setSortedPeople] = useState<Person[]>(people);
+  const [filteredPeople, setFilteredPeople] = useState<Person[]>(initialPeople);
+  const [sortedPeople, setSortedPeople] = useState<Person[]>(initialPeople);
 
   // Properties available for sorting
   const propertiesToSortBy: string[] = [
-    'select_one', // Added "Select one" as the first option
+    'select_one',
     'name',
     'father_name',
     'mother_name',
@@ -49,7 +54,7 @@ export default function MainPage({ people }: MainPageProps) {
     'incident_on',
   ];
 
-  // Properties available for filtering (excluding 'bio_snippet', 'biography', 'image_urls')
+  // Properties available for filtering
   const propertiesToFilterBy: string[] = [
     'name',
     'father_name',
@@ -63,7 +68,7 @@ export default function MainPage({ people }: MainPageProps) {
     'incident_on',
   ];
 
-  // Helper function to format property names from snake_case to Title Case
+  // Helper function to format property names
   function formatPropertyName(propName: string): string {
     return propName
       .split('_')
@@ -73,33 +78,46 @@ export default function MainPage({ people }: MainPageProps) {
 
   // Handle the "Go" button click for filtering
   const handleGoFilter = () => {
-    if (
-      selectedFilterProperty !== 'select_one' &&
-      filterInput.trim() !== ''
-    ) {
+    if (selectedFilterProperty !== 'select_one' && filterInput.trim() !== '') {
       setAppliedFilterProperty(selectedFilterProperty);
       setAppliedFilterValue(filterInput.trim());
     } else {
-      // Reset filter if "Select one" is chosen or input is empty
       setAppliedFilterProperty('select_one');
       setAppliedFilterValue('');
     }
   };
 
-  // Handle the "Sort By" change
+  // Handle sorting
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     setSelectedSortProperty(value);
   };
 
-  // Effect to auto-reset filter when filterInput is cleared
-  useEffect(() => {
-  if (filterInput.trim() === '') {
-    setAppliedFilterProperty('select_one');
-    setAppliedFilterValue('');
-  }
-  }, [filterInput]);
+  // Fetch people based on the current page
+  const fetchPeople = async (newPage: number) => {
+    const res = await fetch(`/api/people?page=${newPage}&limit=${limit}`);
+    const data = await res.json();
+    setPeople(data.people);
+    setTotalPeople(data.total);
+  };
 
+  // Handle "Next" button click
+  const handleNextPage = () => {
+    if (page * limit < totalPeople) {
+      const newPage = page + 1;
+      setPage(newPage);
+      fetchPeople(newPage);
+    }
+  };
+
+  // Handle "Previous" button click
+  const handlePreviousPage = () => {
+    if (page > 1) {
+      const newPage = page - 1;
+      setPage(newPage);
+      fetchPeople(newPage);
+    }
+  };
 
   // Effect to handle filtering based on appliedFilterProperty and appliedFilterValue
   useEffect(() => {
@@ -110,18 +128,9 @@ export default function MainPage({ people }: MainPageProps) {
       updatedPeople = updatedPeople.filter((person) => {
         const propValue = person[appliedFilterProperty as keyof Person];
         if (propValue == null) return false;
-        
-
         const propStr = propValue.toString().toLowerCase();
-        const filterStr = appliedFilterValue.toString().toLowerCase();
-
-        // Exact match comparison if propValue and appliedFilterValue are numbers
-        if (!isNaN(Number(propValue)) && !isNaN(Number(appliedFilterValue))) {
-          return Number(propValue) === Number(appliedFilterValue);
-        }
-        // Otherwise, fallback to string includes
+        const filterStr = appliedFilterValue.toLowerCase();
         return propStr.includes(filterStr);
-
       });
     }
 
@@ -129,7 +138,6 @@ export default function MainPage({ people }: MainPageProps) {
     if (searchQuery.trim() !== '') {
       const searchLower = searchQuery.toLowerCase();
       updatedPeople = updatedPeople.filter((person) => {
-        // Array of keys to search
         const keysToSearch: (keyof Person)[] = [
           'name',
           'father_name',
@@ -143,8 +151,6 @@ export default function MainPage({ people }: MainPageProps) {
           'age',
           'incident_on',
         ];
-
-        // Check if any key includes the search query
         return keysToSearch.some((key) => {
           const value = person[key];
           return value != null && value.toString().toLowerCase().includes(searchLower);
@@ -165,27 +171,16 @@ export default function MainPage({ people }: MainPageProps) {
         const aValue = a[prop];
         const bValue = b[prop];
 
-        // Handle undefined or null values
         if (aValue == null && bValue != null) return -1;
         if (aValue != null && bValue == null) return 1;
         if (aValue == null && bValue == null) return 0;
 
-        // Handle number comparison
         if (typeof aValue === 'number' && typeof bValue === 'number') {
           return aValue - bValue;
         }
 
-        // Handle date comparison
-        if (prop === 'incident_on') {
-          const aDate = new Date(aValue.toString());
-          const bDate = new Date(bValue.toString());
-          return aDate.getTime() - bDate.getTime();
-        }
-
-        // Handle string comparison
         const aStr = aValue.toString().toLowerCase();
         const bStr = bValue.toString().toLowerCase();
-
         if (aStr < bStr) return -1;
         if (aStr > bStr) return 1;
         return 0;
@@ -201,11 +196,7 @@ export default function MainPage({ people }: MainPageProps) {
       <div className="w-full p-4 bg-gray-200 border border-gray-300 flex flex-wrap items-center space-y-4 sm:space-y-0 sm:space-x-6">
         {/* Filter By Section */}
         <div className="flex items-center space-x-2">
-          {/* Filter By Label */}
-          <label htmlFor="filterSelect" className="text-gray-700">
-            Filter by:
-          </label>
-          {/* Filter By Select */}
+          <label htmlFor="filterSelect" className="text-gray-700">Filter by:</label>
           <select
             id="filterSelect"
             value={selectedFilterProperty}
@@ -214,12 +205,9 @@ export default function MainPage({ people }: MainPageProps) {
           >
             <option value="select_one">Select one</option>
             {propertiesToFilterBy.map((prop) => (
-              <option key={prop} value={prop}>
-                {formatPropertyName(prop)}
-              </option>
+              <option key={prop} value={prop}>{formatPropertyName(prop)}</option>
             ))}
           </select>
-          {/* Filter Input Box */}
           <input
             type="text"
             placeholder="Enter value..."
@@ -227,7 +215,6 @@ export default function MainPage({ people }: MainPageProps) {
             value={filterInput}
             onChange={(e) => setFilterInput(e.target.value)}
           />
-          {/* Go Button */}
           <button
             onClick={handleGoFilter}
             className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
@@ -238,11 +225,7 @@ export default function MainPage({ people }: MainPageProps) {
 
         {/* Sort By Section */}
         <div className="flex items-center space-x-2">
-          {/* Sort By Label */}
-          <label htmlFor="sortSelect" className="text-gray-700">
-            Sort by:
-          </label>
-          {/* Sort By Select */}
+          <label htmlFor="sortSelect" className="text-gray-700">Sort by:</label>
           <select
             id="sortSelect"
             value={selectedSortProperty}
@@ -250,34 +233,44 @@ export default function MainPage({ people }: MainPageProps) {
             className="p-2 border border-gray-300 rounded-md text-base"
           >
             <option value="select_one">Select one</option>
-            {propertiesToSortBy.slice(1).map((prop) => ( // Exclude 'select_one' from being repeated
-              <option key={prop} value={prop}>
-                {formatPropertyName(prop)}
-              </option>
+            {propertiesToSortBy.slice(1).map((prop) => (
+              <option key={prop} value={prop}>{formatPropertyName(prop)}</option>
             ))}
           </select>
-          {/* Results Count */}
-          <span >
-            <input
+        </div>
+
+        {/* Search Box Section */}
+        <div className="flex-1 sm:flex sm:justify-end">
+          <input
             type="text"
             placeholder="Search..."
             className="p-2 border border-gray-300 rounded-md text-base w-full sm:w-40"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          </span>
-        </div>
-
-        {/* Search Box Section */}
-        <div className="flex-1 sm:flex sm:justify-end">
-          {filteredPeople.length}
         </div>
       </div>
 
+      {/* Pagination Controls */}
+      <div className="flex justify-end space-x-4 mb-4">
+        <button
+          onClick={handlePreviousPage}
+          disabled={page === 1}
+          className={`p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 ${page === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+        >
+          &lt;&lt; Previous
+        </button>
+        <button
+          onClick={handleNextPage}
+          disabled={page * limit >= totalPeople}
+          className={`p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 ${page * limit >= totalPeople ? 'opacity-50 cursor-not-allowed' : ''}`}
+        >
+          Next &gt;&gt;
+        </button>
+      </div>
+
       {/* People List */}
-      <PeopleList
-        people={sortedPeople}
-      />
+      <PeopleList people={sortedPeople} />
     </div>
   );
 }
