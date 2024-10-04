@@ -14,7 +14,6 @@ interface Person {
   incident_district: string;
   incident_on: string;
   bio_snippet: string;
-  biography: string;
   image_urls: string[];
 }
 
@@ -24,7 +23,6 @@ export async function GET(req: Request) {
   const jsonData = fs.readFileSync(filePath, 'utf-8');
   const people: Person[] = JSON.parse(jsonData);
 
-  // Extract query parameters
   const page = Number(searchParams.get('page')) || 1;
   const limit = Number(searchParams.get('limit')) || 20;
   const sort = searchParams.get('sort') || 'name';
@@ -32,13 +30,13 @@ export async function GET(req: Request) {
   const filterValue = searchParams.get('filterValue') || '';
   const searchQuery = searchParams.get('searchQuery') || '';
 
-  // Apply filtering
   let filteredPeople = people;
 
+  // Apply filtering
   if (filterProperty && filterValue) {
     filteredPeople = filteredPeople.filter((person) => {
       const propValue = person[filterProperty as keyof Person];
-      return propValue && propValue.toString().toLowerCase().includes(filterValue.toString().toLowerCase());
+      return propValue && propValue.toString().toLowerCase().includes(filterValue.toLowerCase());
     });
   }
 
