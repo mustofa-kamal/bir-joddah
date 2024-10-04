@@ -63,14 +63,20 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
   ];
 
   // Fetch people with pagination, filtering, and sorting
-  const fetchPeople = async (newPage: number, filterProperty = '', filterValue = '') => {
+  // Modify fetchPeople to accept the searchQuery as a parameter
+  const fetchPeople = async (
+    newPage: number,
+    filterProperty = '',
+    filterValue = '',
+    searchQueryValue = searchQuery // Default to the state value if not passed
+  ) => {
     const queryParams = new URLSearchParams({
       page: newPage.toString(),
       limit: limit.toString(),
       sort: selectedSortProperty,
       filterProperty: filterProperty,
       filterValue: filterValue,
-      searchQuery: searchQuery,
+      searchQuery: searchQueryValue, // Use the passed search query value
     });
 
     const res = await fetch(`/api/people?${queryParams.toString()}`);
@@ -96,8 +102,9 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
 
   // Handle search
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-    fetchPeople(page, selectedFilterProperty, filterInput);
+    const newSearchQuery = e.target.value;
+    setSearchQuery(newSearchQuery);
+    fetchPeople(page, selectedFilterProperty, filterInput, newSearchQuery); // Pass the new search query
   };
 
   // Handle pagination
@@ -180,6 +187,7 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
 
       {/* Pagination Controls */}
       <div className="flex justify-end space-x-4 mb-4">
+        {totalPeople}
         <button
           onClick={handlePreviousPage}
           disabled={page === 1}

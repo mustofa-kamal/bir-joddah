@@ -44,7 +44,7 @@ export async function GET(req: Request) {
   if (searchQuery) {
     const searchLower = searchQuery.toLowerCase();
     filteredPeople = filteredPeople.filter((person) => {
-      const keysToSearch: (keyof Person)[] = ['name', 'father_name', 'mother_name', 'home_city', 'home_district'];
+      const keysToSearch: (keyof Person)[] = ['name', 'father_name', 'mother_name', 'home_city', 'home_district','age','profession','incident_city','incident_district','incident_on','bio_snippet'];
       return keysToSearch.some((key) => person[key]?.toString().toLowerCase().includes(searchLower));
     });
   }
