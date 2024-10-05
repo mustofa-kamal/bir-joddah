@@ -7,14 +7,17 @@ interface Person {
   name: string;
   father_name: string;
   mother_name: string;
+  home_neighborhood: string;
   home_city: string;
   home_district: string;
   age: number;
   profession: string;
+  incident_neighborhood:string;
   incident_city: string;
   incident_district: string;
   incident_on: string;
   bio_snippet: string;
+  biography: string;
   image_urls: string[];
 }
 
@@ -30,6 +33,8 @@ export default function PeopleList({ people, page, limit }: PeopleListProps ) {
       {people.length > 0 ? (
         <ul className="space-y-8">
           {people.map((person, index) => (
+     
+            
             <li key={index} className="relative border border-gray-200 p-4 rounded-md">
               {/* Decorative Borders */}
               <div
@@ -88,7 +93,7 @@ export default function PeopleList({ people, page, limit }: PeopleListProps ) {
                     <p><strong>Name:</strong> {person.name}</p>
                     <p><strong>Father's Name:</strong> {person.father_name}</p>
                     <p><strong>Mother's Name:</strong> {person.mother_name}</p>
-                    <p><strong>Home Address:</strong> {person.home_city}, {person.home_district}</p>
+                    <p><strong>Home Address:</strong> {person.home_neighborhood}, {person.home_city}, {person.home_district}</p>
                   </div>
  
  
@@ -96,7 +101,7 @@ export default function PeopleList({ people, page, limit }: PeopleListProps ) {
                   <div className="space-y-2">
                     <p><strong>Age:</strong> {person.age}</p>
                     <p><strong>Profession:</strong> {person.profession}</p>
-                    <p><strong>Died at:</strong> {person.incident_city}, {person.incident_district}</p>
+                    <p><strong>Died at:</strong> {person.incident_neighborhood}, {person.incident_city}, {person.incident_district}</p>
                     <p><strong>Died on:</strong> {person.incident_on}</p>
                   </div>
  

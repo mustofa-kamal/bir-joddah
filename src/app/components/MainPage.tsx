@@ -7,10 +7,12 @@ interface Person {
   name: string;
   father_name: string;
   mother_name: string;
+  home_neighborhood: string;
   home_city: string;
   home_district: string;
   age: number;
   profession: string;
+  incident_neighborhood:string;
   incident_city: string;
   incident_district: string;
   incident_on: string;
@@ -37,12 +39,12 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
   // List of properties available for sorting
   const propertiesToSortBy = [
     'name',
-    'father_name',
-    'mother_name',
+    'home_neighborhood',
     'home_city',
     'home_district',
     'age',
     'profession',
+    'incident_neighborhood',
     'incident_city',
     'incident_district',
     'incident_on',
@@ -51,12 +53,12 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
   // List of properties available for filtering
   const propertiesToFilterBy = [
     'name',
-    'father_name',
-    'mother_name',
+    'home_neighborhood',
     'home_city',
     'home_district',
     'age',
     'profession',
+    'incident_neighborhood',
     'incident_city',
     'incident_district',
     'incident_on',

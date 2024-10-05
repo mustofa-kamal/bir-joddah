@@ -5,9 +5,11 @@ interface Person {
   father_name: string;
   mother_name: string;
   home_city: string;
+  home_neighborhood: string;
   home_district: string;
   age: number;
   profession: string;
+  incident_neighborhood: string;
   incident_city: string;
   incident_district: string;
   incident_on: string;
