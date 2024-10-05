@@ -110,7 +110,7 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
   // Handle pagination
   const handleNextPage = () => {
     const newPage = page + 1;
-    if (newPage * limit < totalPeople) {
+    if ( totalPeople-(newPage * limit) >-limit) {
       setPage(newPage);
       fetchPeople(newPage, selectedFilterProperty, filterInput);
     }
@@ -187,7 +187,7 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
 
       {/* Pagination Controls */}
       <div className="flex justify-end space-x-4 mb-4">
-        {totalPeople}
+        {totalPeople}:{page}
         <button
           onClick={handlePreviousPage}
           disabled={page === 1}
@@ -205,7 +205,7 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
       </div>
 
       {/* People List */}
-      <PeopleList people={people} />
+      <PeopleList people={people} page={page} limit={limit}/>
     </div>
   );
 }

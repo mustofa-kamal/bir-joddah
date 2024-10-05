@@ -20,9 +20,11 @@ interface Person {
 
 interface PeopleListProps {
   people: Person[];
+  page:number;
+  limit:number;
 }
 
-export default function PeopleList({ people }: PeopleListProps) {
+export default function PeopleList({ people, page, limit }: PeopleListProps ) {
   return (
     <div>
       {people.length > 0 ? (
@@ -61,10 +63,10 @@ export default function PeopleList({ people }: PeopleListProps) {
  
  
               {/* Content */}
-              <div className="relative pt-10 pb-10 pl-10 pr-8">
+              <div className="relative pt-2 pb-2 pl-2 pr-2">
+                {(index +1) + limit * (page-1)} 
                 {/* Responsive Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-                 
                   {/* First Column: Image and Image Title */}
                   <div className="text-center">
                     <Image
