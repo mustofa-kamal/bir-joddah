@@ -70,12 +70,13 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
     newPage: number,
     filterProperty = '',
     filterValue = '',
-    searchQueryValue = searchQuery // Default to the state value if not passed
+    searchQueryValue = searchQuery, // Default to the state value if not passed
+    selectedSortPropertyValue=selectedSortProperty // Default to the state value if not passed
   ) => {
     const queryParams = new URLSearchParams({
       page: newPage.toString(),
       limit: limit.toString(),
-      sort: selectedSortProperty,
+      sort: selectedSortPropertyValue,
       filterProperty: filterProperty,
       filterValue: filterValue,
       searchQuery: searchQueryValue, // Use the passed search query value
@@ -95,11 +96,14 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
     }
   };
 
+  
+
+
   // Handle sorting
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    setSelectedSortProperty(value);
-    fetchPeople(page, selectedFilterProperty, filterInput);
+    const newSortvalue = e.target.value;
+    setSelectedSortProperty(newSortvalue);
+    fetchPeople(page, selectedFilterProperty, filterInput, searchQuery,newSortvalue  ); // Pass the new search query
   };
 
   // Handle search
