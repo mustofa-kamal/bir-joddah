@@ -91,8 +91,8 @@ export default function PeopleList({ people, page, limit }: PeopleListProps ) {
                   {/* Second Column: Name, Father's Name, Mother's Name, Home Address, Age */}
                   <div className="space-y-2">
                     <p><strong>Name:</strong> {person.name}</p>
-                    <p><strong>Father's Name:</strong> {person.father_name}</p>
-                    <p><strong>Mother's Name:</strong> {person.mother_name}</p>
+                    <p><strong>Father's Name:</strong> {person.father_name ? person.father_name : "Not on file"}</p>
+                    <p><strong>Father's Name:</strong> {person.mother_name ? person.mother_name : "Not on file"}</p>
                     <p><strong>Home Address:</strong> {person.home_neighborhood}, {person.home_city}, {person.home_district}</p>
                   </div>
  
