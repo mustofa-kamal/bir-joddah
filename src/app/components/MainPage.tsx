@@ -12,7 +12,7 @@ interface Person {
   home_district: string;
   age: number;
   profession: string;
-  incident_neighborhood:string;
+  incident_neighborhood: string;
   incident_city: string;
   incident_district: string;
   incident_on: string;
@@ -71,7 +71,7 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
     filterProperty = '',
     filterValue = '',
     searchQueryValue = searchQuery, // Default to the state value if not passed
-    selectedSortPropertyValue=selectedSortProperty // Default to the state value if not passed
+    selectedSortPropertyValue = selectedSortProperty // Default to the state value if not passed
   ) => {
     const queryParams = new URLSearchParams({
       page: newPage.toString(),
@@ -96,14 +96,14 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
     }
   };
 
-  
+
 
 
   // Handle sorting
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newSortvalue = e.target.value;
     setSelectedSortProperty(newSortvalue);
-    fetchPeople(page, selectedFilterProperty, filterInput, searchQuery,newSortvalue  ); // Pass the new search query
+    fetchPeople(page, selectedFilterProperty, filterInput, searchQuery, newSortvalue); // Pass the new search query
   };
 
   // Handle search
@@ -116,7 +116,7 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
   // Handle pagination
   const handleNextPage = () => {
     const newPage = page + 1;
-    if ( totalPeople-(newPage * limit) >-limit) {
+    if (totalPeople - (newPage * limit) > -limit) {
       setPage(newPage);
       fetchPeople(newPage, selectedFilterProperty, filterInput);
     }
@@ -129,6 +129,17 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
       fetchPeople(newPage, selectedFilterProperty, filterInput);
     }
   };
+
+  const handleFilterInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let newFilterInput = e.target.value;
+    if (newFilterInput.trim() === '') {
+      setFilterInput(newFilterInput);
+      fetchPeople(page, selectedFilterProperty, newFilterInput, searchQuery, selectedSortProperty); // clearing filter on empty input filter
+    } else {
+      setFilterInput(newFilterInput);// Go button will send http request
+    }
+
+  }
 
   return (
     <div className="p-0 space-y-6">
@@ -153,7 +164,7 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
             placeholder="Enter value..."
             className="p-2 border border-gray-300 rounded-md text-base w-40"
             value={filterInput}
-            onChange={(e) => setFilterInput(e.target.value)}
+            onChange={handleFilterInput}
           />
           <button
             onClick={handleGoFilter}
@@ -211,7 +222,7 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
       </div>
 
       {/* People List */}
-      <PeopleList people={people} page={page} limit={limit}/>
+      <PeopleList people={people} page={page} limit={limit} />
     </div>
   );
 }
