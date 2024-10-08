@@ -103,7 +103,8 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchQuery = e.target.value;
     setSearchQuery(newSearchQuery);
-    fetchPeople(page, selectedFilterProperty, filterInput, newSearchQuery);
+    setPage(1);
+    fetchPeople(1, selectedFilterProperty, filterInput, newSearchQuery);
   };
 
   const handleNextPage = () => {
