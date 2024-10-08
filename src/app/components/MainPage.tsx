@@ -65,13 +65,12 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
   ];
 
   // Fetch people with pagination, filtering, and sorting
-  // Modify fetchPeople to accept the searchQuery as a parameter
   const fetchPeople = async (
     newPage: number,
     filterProperty = '',
     filterValue = '',
-    searchQueryValue = searchQuery, // Default to the state value if not passed
-    selectedSortPropertyValue = selectedSortProperty // Default to the state value if not passed
+    searchQueryValue = searchQuery,
+    selectedSortPropertyValue = selectedSortProperty
   ) => {
     const queryParams = new URLSearchParams({
       page: newPage.toString(),
@@ -79,7 +78,7 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
       sort: selectedSortPropertyValue,
       filterProperty: filterProperty,
       filterValue: filterValue,
-      searchQuery: searchQueryValue, // Use the passed search query value
+      searchQuery: searchQueryValue,
     });
 
     const res = await fetch(`/api/people?${queryParams.toString()}`);
@@ -88,35 +87,28 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
     setTotalPeople(data.total);
   };
 
-  // Handle filtering
   const handleGoFilter = () => {
     if (selectedFilterProperty !== 'select_one' && filterInput.trim() !== '') {
-      setPage(1); // Reset to first page on filter change
+      setPage(1);
       fetchPeople(1, selectedFilterProperty, filterInput.trim());
     }
   };
 
-
-
-
-  // Handle sorting
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newSortvalue = e.target.value;
     setSelectedSortProperty(newSortvalue);
-    fetchPeople(page, selectedFilterProperty, filterInput, searchQuery, newSortvalue); // Pass the new search query
+    fetchPeople(page, selectedFilterProperty, filterInput, searchQuery, newSortvalue);
   };
 
-  // Handle search
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchQuery = e.target.value;
     setSearchQuery(newSearchQuery);
-    fetchPeople(page, selectedFilterProperty, filterInput, newSearchQuery); // Pass the new search query
+    fetchPeople(page, selectedFilterProperty, filterInput, newSearchQuery);
   };
 
-  // Handle pagination
   const handleNextPage = () => {
     const newPage = page + 1;
-    if (totalPeople - (newPage * limit) > -limit) {
+    if (totalPeople - newPage * limit > -limit) {
       setPage(newPage);
       fetchPeople(newPage, selectedFilterProperty, filterInput);
     }
@@ -134,92 +126,110 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
     let newFilterInput = e.target.value;
     if (newFilterInput.trim() === '') {
       setFilterInput(newFilterInput);
-      fetchPeople(page, selectedFilterProperty, newFilterInput, searchQuery, selectedSortProperty); // clearing filter on empty input filter
+      fetchPeople(page, selectedFilterProperty, newFilterInput, searchQuery, selectedSortProperty);
     } else {
-      setFilterInput(newFilterInput);// Go button will send http request
+      setFilterInput(newFilterInput);
     }
-
-  }
+  };
 
   return (
     <div className="p-0 space-y-6">
-      {/* Top Controls: Filter By, Sort By, and Search Box */}
-      <div className="w-full p-4 bg-gray-200 border border-gray-300 flex flex-wrap items-center space-y-4 sm:space-y-0 sm:space-x-6">
-        {/* Filter By Section */}
-        <div className="flex items-center space-x-2">
-          <label htmlFor="filterSelect" className="text-gray-700">Filter by:</label>
-          <select
-            id="filterSelect"
-            value={selectedFilterProperty}
-            onChange={(e) => setSelectedFilterProperty(e.target.value)}
-            className="p-2 border border-gray-300 rounded-md text-base"
-          >
-            <option value="select_one">Select one</option>
-            {propertiesToFilterBy.map((prop) => (
-              <option key={prop} value={prop}>{prop.replace('_', ' ')}</option>
-            ))}
-          </select>
-          <input
-            type="text"
-            placeholder="Enter value..."
-            className="p-2 border border-gray-300 rounded-md text-base w-40"
-            value={filterInput}
-            onChange={handleFilterInput}
-          />
-          <button
-            onClick={handleGoFilter}
-            className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-          >
-            Go
-          </button>
+
+
+      <div className="w-full p-4 bg-gray-200 border border-gray-300 flex flex-wrap items-center space-y-4 sm:space-y-0">
+        {/* Left-side controls (Filter, Sort, Search, Arrows) */}
+        <div className="flex flex-wrap items-center space-x-6 flex-grow">
+          {/* Filter By Section */}
+          <div className="flex items-center space-x-2">
+            <label htmlFor="filterSelect" className="text-gray-700">Filter by:</label>
+            <select
+              id="filterSelect"
+              value={selectedFilterProperty}
+              onChange={(e) => setSelectedFilterProperty(e.target.value)}
+              className="p-2 border border-gray-300 rounded-md text-base w-full sm:w-auto"
+            >
+              <option value="select_one">Select one</option>
+              {propertiesToFilterBy.map((prop) => (
+                <option key={prop} value={prop}>{prop.replace('_', ' ')}</option>
+              ))}
+            </select>
+            <input
+              type="text"
+              placeholder="Enter value..."
+              className="p-2 border border-gray-300 rounded-md text-base w-full sm:w-40"
+              value={filterInput}
+              onChange={handleFilterInput}
+            />
+            <button
+              onClick={handleGoFilter}
+              className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            >
+              Go
+            </button>
+          </div>
+
+          {/* Sort By Section */}
+          <div className="flex items-center space-x-2">
+            <label htmlFor="sortSelect" className="text-gray-700">Sort by:</label>
+            <select
+              id="sortSelect"
+              value={selectedSortProperty}
+              onChange={handleSortChange}
+              className="p-2 border border-gray-300 rounded-md text-base w-full sm:w-auto"
+            >
+              <option value="select_one">Select one</option>
+              {propertiesToSortBy.map((prop) => (
+                <option key={prop} value={prop}>{prop.replace('_', ' ')}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Search Box with Arrow Buttons */}
+          <div className="flex items-center space-x-2 w-full sm:w-auto">
+            <input
+              type="text"
+              placeholder="Search..."
+              className="p-2 border border-gray-300 rounded-md text-base w-full sm:w-40"
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+            <button
+              onClick={handlePreviousPage}
+              disabled={page === 1}
+              className={`p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 ${page === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              &lt;&lt;
+            </button>
+            <button
+              onClick={handleNextPage}
+              disabled={page * limit >= totalPeople}
+              className={`p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 ${page * limit >= totalPeople ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              &gt;&gt;
+            </button>
+          </div>
         </div>
 
-        {/* Sort By Section */}
-        <div className="flex items-center space-x-2">
-          <label htmlFor="sortSelect" className="text-gray-700">Sort by:</label>
-          <select
-            id="sortSelect"
-            value={selectedSortProperty}
-            onChange={handleSortChange}
-            className="p-2 border border-gray-300 rounded-md text-base"
+        {/* Total Records Message (eye-catching) */}
+        <div className="ml-auto flex items-center p-2 bg-yellow-100 border border-yellow-500 rounded-md text-lg font-bold text-yellow-900 shadow-lg w-full sm:w-auto mt-4 sm:mt-0">
+          <svg
+            className="w-6 h-6 mr-2 text-yellow-900"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <option value="select_one">Select one</option>
-            {propertiesToSortBy.map((prop) => (
-              <option key={prop} value={prop}>{prop.replace('_', ' ')}</option>
-            ))}
-          </select>
-        </div>
-
-        {/* Search Box */}
-        <div className="flex-1 sm:flex sm:justify-end">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="p-2 border border-gray-300 rounded-md text-base w-full sm:w-40"
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M13 16h-1v-4h-1m0-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z"
+            ></path>
+          </svg>
+          Total records: {totalPeople}
         </div>
       </div>
 
-      {/* Pagination Controls */}
-      <div className="flex justify-end space-x-4 mb-4">
-        {totalPeople}:{page}
-        <button
-          onClick={handlePreviousPage}
-          disabled={page === 1}
-          className={`p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 ${page === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          &lt;&lt; Previous
-        </button>
-        <button
-          onClick={handleNextPage}
-          disabled={page * limit >= totalPeople}
-          className={`p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 ${page * limit >= totalPeople ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          Next &gt;&gt;
-        </button>
-      </div>
 
       {/* People List */}
       <PeopleList people={people} page={page} limit={limit} />
