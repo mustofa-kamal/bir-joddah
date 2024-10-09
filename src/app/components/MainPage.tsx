@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import PeopleList from './PeopleList';
+import PageNavigator from './PageNavigator';
 
 interface Person {
   name: string;
@@ -186,6 +187,7 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
           </div>
 
           {/* Search Box with Arrow Buttons */}
+
           <div className="flex items-center space-x-2 w-full sm:w-auto">
             <input
               type="text"
@@ -194,21 +196,12 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
               value={searchQuery}
               onChange={handleSearchChange}
             />
-            <button
-              onClick={handlePreviousPage}
-              disabled={page === 1}
-              className={`p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 ${page === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              &lt;&lt;
-            </button>
-            <button
-              onClick={handleNextPage}
-              disabled={page * limit >= totalPeople}
-              className={`p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 ${page * limit >= totalPeople ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              &gt;&gt;
-            </button>
+
+            <PageNavigator page={page} totalPeople={totalPeople} limit={limit} selectedFilterProperty={selectedFilterProperty}
+
+              filterInput={filterInput} setPage={setPage} fetchPeople={fetchPeople} />
           </div>
+
         </div>
 
         {/* Total Records Message (eye-catching) */}
