@@ -227,6 +227,20 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
 
       {/* People List */}
       <PeopleList people={people} page={page} limit={limit} />
+
+      <div className="flex justify-end pb-4 pr-4">
+        <PageNavigator
+          page={page}
+          totalPeople={totalPeople}
+          limit={limit}
+          selectedFilterProperty={selectedFilterProperty}
+          filterInput={filterInput}
+          setPage={setPage}
+          fetchPeople={fetchPeople}
+        />
+      </div>
+
+
     </div>
   );
 }
