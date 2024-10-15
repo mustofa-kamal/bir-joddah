@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { Person } from '../../../components/commonTypes';
+import { Person } from '../../components/commonTypes';
 
 export async function GET(req: Request) {
   const filePath = path.join(process.cwd(), 'data', 'finalize-new.json');
