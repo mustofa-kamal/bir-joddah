@@ -1,0 +1,31 @@
+// src/types/commonTypes.ts
+
+export interface Person {
+    "case_id": number,
+    "facility_name": string,
+    "name": string,
+    "father_name": string,
+    "contact_no": string,
+    "present_local": string,
+    "present_district": string,
+    "present_division": string,
+    "permanent_local": string,
+    "permanent_district": string,
+    "permanent_division": string,
+    "type_of_service": string,
+    "nid": string,
+    "facility_id": number,
+    "gender": string,
+    "religion": string,
+    "profession": string,
+    "source": string,
+    "age": string,
+    "school": string,
+    "work_at": string,
+    "date_of_birth": string,
+    "place_of_birth": string,
+    "place_of_dead": string,
+    "date_of_dead": string,
+    "biography": string,
+    image_urls: string[];
+}

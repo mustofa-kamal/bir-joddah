@@ -1,27 +1,11 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-
-interface Person {
-  name: string;
-  father_name: string;
-  mother_name: string;
-  home_neighborhood:string;
-  home_city: string;
-  home_district: string;
-  age: number;
-  profession: string;
-  incident_neighborhood:string;
-  incident_city: string;
-  incident_district: string;
-  incident_on: string;
-  bio_snippet: string;
-  image_urls: string[];
-}
+import { Person } from '../../components/commonTypes';
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const filePath = path.join(process.cwd(), 'data', 'people.json');
+  const filePath = path.join(process.cwd(), 'data', 'finalize-new.json');
   const jsonData = fs.readFileSync(filePath, 'utf-8');
   const people: Person[] = JSON.parse(jsonData);
 
@@ -45,17 +29,24 @@ export async function GET(req: Request) {
   // Apply search
   if (searchQuery) {
     const searchLower = searchQuery.toLowerCase();
+    const keysToSearch: (keyof Person)[] = [
+      'case_id', 'name', 'father_name', 'contact_no', 'present_local', 'present_district',
+      'present_division', 'permanent_local', 'permanent_district', 'permanent_division',
+      'type_of_service', 'nid', 'facility_id', 'gender', 'profession', 'source', 'age', 
+      'school', 'work_at', 'date_of_birth', 'place_of_birth', 'place_of_dead', 
+      'date_of_dead', 'biography', 'image_urls'
+    ];
+
     filteredPeople = filteredPeople.filter((person) => {
-      const keysToSearch: (keyof Person)[] = ['name', 'father_name', 'mother_name', 'home_neighborhood', 'home_city', 'home_district','age','profession', 'incident_neighborhood','incident_city','incident_district','incident_on','bio_snippet'];
       return keysToSearch.some((key) => person[key]?.toString().toLowerCase().includes(searchLower));
     });
   }
 
   // Apply sorting
   filteredPeople.sort((a, b) => {
-    const aValue = a[sort as keyof Person];
-    const bValue = b[sort as keyof Person];
-    return (aValue?.toString().localeCompare(bValue?.toString())) || 0;
+    const aValue = a[sort as keyof Person]?.toString() || '';
+    const bValue = b[sort as keyof Person]?.toString() || '';
+    return aValue.localeCompare(bValue);
   });
 
   // Pagination

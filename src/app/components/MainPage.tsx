@@ -4,23 +4,8 @@ import { useState, useEffect } from 'react';
 import PeopleList from './PeopleList';
 import PageNavigator from './PageNavigator';
 
-interface Person {
-  name: string;
-  father_name: string;
-  mother_name: string;
-  home_neighborhood: string;
-  home_city: string;
-  home_district: string;
-  age: number;
-  profession: string;
-  incident_neighborhood: string;
-  incident_city: string;
-  incident_district: string;
-  incident_on: string;
-  bio_snippet: string;
-  biography: string;
-  image_urls: string[];
-}
+import { Person } from "../components/commonTypes"
+
 
 interface MainPageProps {
   people: Person[];
@@ -37,32 +22,52 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
   const [selectedFilterProperty, setSelectedFilterProperty] = useState<string>('select_one');
   const [filterInput, setFilterInput] = useState('');
 
+  /*
+
+   "case_id": number,
+    "name": string,
+    "father_name": string,
+    "contact_no": string,
+    "present_local": string,
+    "present_district": string,
+    "present_division": string,
+    "permanent_local": string,
+    "permanent_district": string,
+    "permanent_division": string,
+    "type_of_service": string,
+    "nid": string,
+    "facility_id": number,
+    "sex": string,
+    "profession": string,
+    "source": string,
+    "age": string,
+    "school": string,
+    "work_at": string,
+    "date_of_birth": string,
+    "place_of_birth": string,
+    "place_of_dead": string,
+    "date_of_dead": string,
+    "biography": string,
+    image_urls: string[];
+    */
+
   // List of properties available for sorting
   const propertiesToSortBy = [
     'name',
-    'home_neighborhood',
-    'home_city',
-    'home_district',
-    'age',
+    'present_district',
+    'permanent_district',
     'profession',
-    'incident_neighborhood',
-    'incident_city',
-    'incident_district',
-    'incident_on',
+    'facility_name'
+    
   ];
 
   // List of properties available for filtering
   const propertiesToFilterBy = [
     'name',
-    'home_neighborhood',
-    'home_city',
-    'home_district',
-    'age',
+    'present_district',
+    'permanent_district',
     'profession',
-    'incident_neighborhood',
-    'incident_city',
-    'incident_district',
-    'incident_on',
+    'facility_name'
   ];
 
   // Fetch people with pagination, filtering, and sorting
