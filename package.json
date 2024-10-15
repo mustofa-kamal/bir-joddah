@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "@google-cloud/translate": "^8.5.0",
+    "chart.js": "^4.4.4",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "firebase": "^10.13.2",
     "firebase-frameworks": "^0.11.4",
     "next": "14.2.13",
     "react": "^18",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
     "translate-google": "^1.5.0"
   },
