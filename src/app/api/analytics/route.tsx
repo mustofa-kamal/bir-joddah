@@ -15,6 +15,9 @@ export async function GET(req: Request) {
   const groupedByDivision: { [division: string]: number } = {};
   // Group by profession
   const groupedByProfession: { [profession: string]: number } = {};
+  
+  const groupedByFacility: { [facility: string]: number } = {};
+  
 
   people.forEach((person) => {
     // Grouping by present_district
@@ -40,7 +43,18 @@ export async function GET(req: Request) {
     } else {
       groupedByProfession[profession] = 1;
     }
+
+    // Grouping by facility
+    const facility = person.facility_name || 'Unknown';
+    if (groupedByFacility[facility]) {
+      groupedByFacility[facility] += 1;
+    } else {
+      groupedByFacility[facility] = 1;
+    }
+
   });
+
+ 
 
   // Convert to arrays
   const dataByDistrict = Object.entries(groupedByDistrict).map(([label, count]) => ({
@@ -58,9 +72,15 @@ export async function GET(req: Request) {
     count,
   }));
 
+  const dataByFacility = Object.entries(groupedByFacility).map(([label, count]) => ({
+    label,
+    count,
+  }));
+
   return NextResponse.json({
     dataByDistrict,
     dataByDivision,
     dataByProfession,
+    dataByFacility
   });
 }

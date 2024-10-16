@@ -35,6 +35,7 @@ export default function AnalyticsComponent() {
   const [dataByDistrict, setDataByDistrict] = useState<AnalyticsData[]>([]);
   const [dataByDivision, setDataByDivision] = useState<AnalyticsData[]>([]);
   const [dataByProfession, setDataByProfession] = useState<AnalyticsData[]>([]);
+  const [dataByFacility, setDataByFacility] = useState<AnalyticsData[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,6 +44,7 @@ export default function AnalyticsComponent() {
       setDataByDistrict(json.dataByDistrict);
       setDataByDivision(json.dataByDivision);
       setDataByProfession(json.dataByProfession);
+      setDataByFacility(json.dataByFacility);
     };
     fetchData();
   }, []);
@@ -155,15 +157,29 @@ export default function AnalyticsComponent() {
         </div>
       </div>
 
+       {/* Chart grouped by facility */}
+       <div>
+        <h2 className="text-3xl font-extrabold text-center mt-6 mb-4">
+          Honoring Our Heroes: Served by Facility
+        </h2>
+        <div style={{ width: '100%', maxWidth: '700px', margin: '0 auto' }}>
+          <Bar data={prepareChartData(dataByFacility, 200)} options={barOptions} height={1000}/>
+        </div>
+      </div>
+
       {/* Chart grouped by Profession */}
       <div>
         <h2 className="text-3xl font-extrabold text-center mt-6 mb-4">
           Honoring Our Heroes: Sacrifices by Profession
         </h2>
         <div style={{ width: '100%', maxWidth: '700px', margin: '0 auto' }}>
-          <Bar data={prepareChartData(dataByProfession, 10)} options={barOptions} />
+          <Bar data={prepareChartData(dataByProfession, 20)} options={barOptions} height={500}/>
         </div>
       </div>
+
+
+
+
     </div>
   );
 }
