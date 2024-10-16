@@ -2,11 +2,29 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import {
+  Chart,
+  ArcElement,
+  Tooltip,
+  Legend,
+  ChartOptions,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+} from 'chart.js';
+import { Pie, Bar } from 'react-chartjs-2';
+import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
+import randomColor from 'randomcolor';
 
-Chart.register(ArcElement, Tooltip, Legend, ChartDataLabels);
+Chart.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  ChartDataLabels,
+  CategoryScale,
+  LinearScale,
+  BarElement
+);
 
 interface AnalyticsData {
   label: string;
@@ -29,21 +47,30 @@ export default function AnalyticsComponent() {
     fetchData();
   }, []);
 
-  // Function to prepare chart data
-  const prepareChartData = (data: AnalyticsData[]) => {
-    const labels = data.map((item) => item.label);
-    const counts = data.map((item) => item.count);
+  const prepareChartData = (data: AnalyticsData[], topN?: number) => {
+    let labels: string[];
+    let counts: number[];
 
-    // Generate colors dynamically if needed
-    const backgroundColors = labels.map((_, index) => {
-      const colors = [
-        '#FF6384', '#36A2EB', '#FFCE56', '#9CCC65',
-        '#FF7043', '#AB47BC', '#26C6DA', '#D4E157',
-        '#FFA726', '#8D6E63', '#42A5F5', '#66BB6A',
-        // Add more colors if needed
-      ];
-      return colors[index % colors.length];
-    });
+    if (topN) {
+      // Group data if topN is specified
+      const sortedData = [...data].sort((a, b) => b.count - a.count);
+      const topData = sortedData.slice(0, topN);
+      const otherData = sortedData.slice(topN);
+
+      labels = topData.map((item) => item.label);
+      counts = topData.map((item) => item.count);
+
+      if (otherData.length > 0) {
+        const otherCount = otherData.reduce((acc, curr) => acc + curr.count, 0);
+        labels.push('Others');
+        counts.push(otherCount);
+      }
+    } else {
+      labels = data.map((item) => item.label);
+      counts = data.map((item) => item.count);
+    }
+
+    const backgroundColors = labels.map(() => randomColor({ luminosity: 'bright' }));
 
     return {
       labels: labels,
@@ -57,7 +84,7 @@ export default function AnalyticsComponent() {
     };
   };
 
-  const options = {
+  const pieOptions: ChartOptions<'pie'> = {
     responsive: true,
     maintainAspectRatio: true,
     plugins: {
@@ -70,7 +97,7 @@ export default function AnalyticsComponent() {
         },
       },
       datalabels: {
-        formatter: (value: number, context: any) => {
+        formatter: (value: number, context: Context) => {
           const dataArray = context.chart.data.datasets[0].data as number[];
           const total = dataArray.reduce((acc, curr) => acc + curr, 0);
           const percentage = ((value / total) * 100).toFixed(1) + '%';
@@ -81,8 +108,27 @@ export default function AnalyticsComponent() {
           weight: 'bold',
           size: 14,
         },
-        align: 'center',
-        anchor: 'center',
+        align: 'center' as const,
+        anchor: 'center' as const,
+      },
+    },
+  };
+
+  const barOptions: ChartOptions<'bar'> = {
+    responsive: true,
+    indexAxis: 'y',
+    scales: {
+      x: {
+        beginAtZero: true,
+      },
+    },
+    plugins: {
+      legend: { display: false },
+      datalabels: {
+        anchor: 'end' as const,
+        align: 'right' as const,
+        formatter: (value: number) => value.toString(),
+        color: '#000',
       },
     },
   };
@@ -95,7 +141,7 @@ export default function AnalyticsComponent() {
           Honoring Our Fallen Heroes: Sacrifices by Division
         </h2>
         <div style={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}>
-          <Pie data={prepareChartData(dataByDivision)} options={options} />
+          <Pie data={prepareChartData(dataByDivision)} options={pieOptions} />
         </div>
       </div>
 
@@ -105,11 +151,19 @@ export default function AnalyticsComponent() {
           Honoring Our Fallen Heroes: Sacrifices by District
         </h2>
         <div style={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}>
-          <Pie data={prepareChartData(dataByDistrict)} options={options} />
+          <Pie data={prepareChartData(dataByDistrict)} options={pieOptions} />
         </div>
       </div>
 
-      
+      {/* Chart grouped by Profession */}
+      <div>
+        <h2 className="text-3xl font-extrabold text-center mt-6 mb-4">
+          Honoring Our Fallen Heroes: Sacrifices by Profession
+        </h2>
+        <div style={{ width: '100%', maxWidth: '700px', margin: '0 auto' }}>
+          <Bar data={prepareChartData(dataByProfession, 10)} options={barOptions} />
+        </div>
+      </div>
     </div>
   );
 }
