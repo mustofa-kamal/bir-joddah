@@ -217,7 +217,7 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
                 d="M13 16h-1v-4h-1m0-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z"
               ></path>
             </svg>
-            Total records: {totalPeople}
+            Records: {totalPeople}
           </div>
         </div>
       </div>

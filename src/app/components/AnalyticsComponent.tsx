@@ -138,7 +138,7 @@ export default function AnalyticsComponent() {
       {/* Chart grouped by Division */}
       <div>
         <h2 className="text-3xl font-extrabold text-center mt-6 mb-4">
-          Honoring Our Fallen Heroes: Sacrifices by Division
+          Honoring Our Heroes: Sacrifices by Division
         </h2>
         <div style={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}>
           <Pie data={prepareChartData(dataByDivision)} options={pieOptions} />
@@ -148,17 +148,17 @@ export default function AnalyticsComponent() {
       {/* Chart grouped by District */}
       <div>
         <h2 className="text-3xl font-extrabold text-center mt-6 mb-4">
-          Honoring Our Fallen Heroes: Sacrifices by District
+          Honoring Our Heroes: Sacrifices by District
         </h2>
-        <div style={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}>
-          <Pie data={prepareChartData(dataByDistrict)} options={pieOptions} />
+        <div style={{ width: '100%', maxWidth: '1100px', margin: '0 auto' }}>
+          <Bar data={prepareChartData(dataByDistrict)} options={barOptions} height={800}/>
         </div>
       </div>
 
       {/* Chart grouped by Profession */}
       <div>
         <h2 className="text-3xl font-extrabold text-center mt-6 mb-4">
-          Honoring Our Fallen Heroes: Sacrifices by Profession
+          Honoring Our Heroes: Sacrifices by Profession
         </h2>
         <div style={{ width: '100%', maxWidth: '700px', margin: '0 auto' }}>
           <Bar data={prepareChartData(dataByProfession, 10)} options={barOptions} />
