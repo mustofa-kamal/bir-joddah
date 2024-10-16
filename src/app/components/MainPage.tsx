@@ -25,34 +25,7 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
   const [view, setView] = useState<'list' | 'analytics'>('list');
 
 
-  /*
-
-   "case_id": number,
-    "name": string,
-    "father_name": string,
-    "contact_no": string,
-    "present_local": string,
-    "present_district": string,
-    "present_division": string,
-    "permanent_local": string,
-    "permanent_district": string,
-    "permanent_division": string,
-    "type_of_service": string,
-    "nid": string,
-    "facility_id": number,
-    "sex": string,
-    "profession": string,
-    "source": string,
-    "age": string,
-    "school": string,
-    "work_at": string,
-    "date_of_birth": string,
-    "place_of_birth": string,
-    "place_of_dead": string,
-    "date_of_dead": string,
-    "biography": string,
-    image_urls: string[];
-    */
+  
 
   // List of properties available for sorting
   const propertiesToSortBy = [
