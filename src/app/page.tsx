@@ -14,9 +14,6 @@ async function getPeopleData(page: number = 1, limit: number = 20): Promise<{ pe
 
 export default async function HomePage() {
   const { people, total } = await getPeopleData(); // Fetch initial data
-
-  
-
   return <MainPage people={people} total={total} />; 
 }
 
