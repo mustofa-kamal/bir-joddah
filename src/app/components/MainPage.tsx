@@ -106,7 +106,7 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
   };
 
   const handleFilterInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newFilterInput = e.target.value;
+    const newFilterInput = e.target.value;
     if (newFilterInput.trim() === '') {
       setFilterInput(newFilterInput);
       fetchPeople(page, selectedFilterProperty, newFilterInput, searchQuery, selectedSortProperty);

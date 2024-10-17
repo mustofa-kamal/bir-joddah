@@ -1,7 +1,5 @@
 // next.config.js
 module.exports = {
-    images: {
-      domains: ['i.imgur.com'],
-    },
-  };
-  
+  distDir: '.next', // Explicitly using the default
+  // Other configurations...
+};

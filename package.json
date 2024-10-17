@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "prebuild": "node inject-env.js",
+     "build": "next build && cp -r .next functions/.next",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "firebase deploy"
   },
   "dependencies": {
     "@google-cloud/translate": "^8.5.0",

@@ -1,6 +1,17 @@
 {
   "hosting": {
-    "source": ".",
-    "frameworksBackend": {}
+    "public": "public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "nextjsFunction"  
+      }
+    ]
+  },
+  "functions": {
+    "source": "functions",
+    "runtime": "nodejs20",  
+    "ignore": ["node_modules/**", ".git/**"]
   }
 }
