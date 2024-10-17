@@ -46,3 +46,6 @@ next-env.d.ts
 .env.production
 
 functions/.next/
+
+functions/.firebaseignore
+functions/data/
