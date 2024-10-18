@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "prebuild": "node inject-env.js",
-    "build": "next build && cp -r .next functions/.next",
+    "build": "./build.sh",
     "deploy": "npm run build && firebase deploy",
     "start": "next start",
     "lint": "next lint"

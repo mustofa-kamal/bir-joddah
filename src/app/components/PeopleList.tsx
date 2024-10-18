@@ -20,36 +20,8 @@ export default function PeopleList({ people, page, limit }: PeopleListProps) {
           {people.map((person, index) => (
 
 
-            <li key={index} className="relative border border-gray-200 p-4 rounded-md">
-              {/* Decorative Borders */}
-              <div
-                className="absolute top-0 left-0 right-0 h-4 bg-repeat-x"
-                style={{
-                  backgroundImage:
-                    "url('/images/flower-border-horizontal.jpeg')",
-                }}
-              ></div>
-              <div
-                className="absolute bottom-0 left-0 right-0 h-4 bg-repeat-x"
-                style={{
-                  backgroundImage:
-                    "url('/images/flower-border-horizontal.jpeg')",
-                }}
-              ></div>
-              <div
-                className="absolute top-0 bottom-0 left-0 w-4 bg-repeat-y"
-                style={{
-                  backgroundImage:
-                    "url('/images/flower-border-vertical.jpeg')",
-                }}
-              ></div>
-              <div
-                className="absolute top-0 bottom-0 right-0 w-4 bg-repeat-y"
-                style={{
-                  backgroundImage:
-                    "url('/images/flower-border-vertical.jpeg')",
-                }}
-              ></div>
+            <li key={index} className="relative border-t  border-gray-200 p-4 ">
+              
 
               {/* Content */}
               <div className="relative pt-2 pb-2 pl-2 pr-2">
@@ -103,7 +75,7 @@ export default function PeopleList({ people, page, limit }: PeopleListProps) {
                     <p><strong>Facility Name: </strong> {person.facility_name}</p>
                     <p><strong>Source: </strong>
                       <a href={person.source} target="_blank" rel="noopener noreferrer">
-                        {person.source}
+                      List from the Directorate General of Health Services, Bangladesh
                       </a>
                     </p>
                   </div>

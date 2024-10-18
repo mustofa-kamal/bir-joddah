@@ -116,7 +116,14 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
   };
 
   return (
-    <div className="p-0 space-y-6">
+    <div className="p-0">
+
+
+
+
+<div className="bg-gray-500 flex items-center justify-center p-1">
+  <p className="text-white font-bold">Honoring the brave who gave their lives for our freedom with our deepest gratitude</p>
+</div>
 
 
       <div className="w-full p-4 bg-gray-200 border border-gray-300 flex flex-wrap items-center space-y-4 sm:space-y-0">
