@@ -125,13 +125,15 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
       <TopHeader text="Honoring the brave who gave their lives for our freedom with our deepest gratitude" />
 
       <Image
-        src="/images/landing_1.jpg"
-        alt="Landing page image"
-        className="w-100 h-100 mx-auto"
-        title="test"
-        width={4000}
-        height={50}
+          src="/images/landing_1.jpeg"
+          alt="Landing page image"
+          layout="responsive"
+          width={4500}
+          height={800}  // Use the actual aspect ratio of the image here
+          className="mx-auto"
+          title="Police blockade in a mass procession in Dhaka -July 2024"
       />
+
 
       <div className="w-full p-4 bg-gray-200   flex flex-wrap items-center space-y-4 sm:space-y-0">
 
