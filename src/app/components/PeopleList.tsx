@@ -35,7 +35,8 @@ export default function PeopleList({ people, page, limit }: PeopleListProps) {
                 {/* Responsive Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
                   {/* First Column: Image and Image Title */}
-                  <div className="text-center font-semibold text-blue-600 hover:underline mt-2 cursor-pointer" onClick={() => handleNameClick(person.name)}>
+                  <div className="text-center font-semibold text-blue-500 hover:text-blue-900 mt-2 cursor-pointer" onClick={() => handleNameClick(person.name)}>
+
                     <Image
                       src={person.image_urls[0]}
                       alt={`Image of ${person.name}`}
