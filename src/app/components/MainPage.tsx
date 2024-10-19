@@ -7,6 +7,8 @@ import PageNavigator from './PageNavigator';
 import { Person } from "./commonTypes"
 import AnalyticsComponent from './AnalyticsComponent'; // Import the AnalyticsComponent
 import TopHeader from './TopHeader';
+import Image from 'next/image';
+
 
 
 interface MainPageProps {
@@ -26,7 +28,7 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
   const [view, setView] = useState<'list' | 'analytics'>('list');
 
 
-  
+
 
   // List of properties available for sorting
   const propertiesToSortBy = [
@@ -120,12 +122,19 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
     <div className="p-0">
 
 
-    <TopHeader text="Honoring the brave who gave their lives for our freedom with our deepest gratitude"/>
+      <TopHeader text="Honoring the brave who gave their lives for our freedom with our deepest gratitude" />
 
+      <Image
+        src="/images/landing_1.jpg"
+        alt="Landing page image"
+        className="w-100 h-100 mx-auto"
+        title="test"
+        width={4000}
+        height={50}
+      />
 
+      <div className="w-full p-4 bg-gray-200   flex flex-wrap items-center space-y-4 sm:space-y-0">
 
-
-      <div className="w-full p-4 bg-gray-200 border border-gray-300 flex flex-wrap items-center space-y-4 sm:space-y-0">
         {/* Left-side controls (Filter, Sort, Search, Arrows) */}
         <div className="flex flex-wrap items-center space-x-6 flex-grow">
           {/* Filter By Section */}

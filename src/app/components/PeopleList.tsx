@@ -26,7 +26,7 @@ export default function PeopleList({ people, page, limit }: PeopleListProps) {
           {people.map((person, index) => (
 
 
-            <li key={index} className="relative border-t  border-gray-200 p-4 ">
+            <li key={index} className="relative border-b  border-gray-200 p-1 ">
               
 
               {/* Content */}
