@@ -11,3 +11,13 @@ rm -rf functions/.next
 
 # Copy the new .next directory to functions
 cp -r .next functions/.next
+
+# Remove existing data directory in functions
+rm -rf functions/data
+
+
+# Ensure the data directory exists in the new location
+mkdir -p functions/data
+
+# Copy the finalize-new.json file to the functions/.next/data directory
+cp data/finalize-new.json functions/data/
