@@ -36,7 +36,8 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
     'present_district',
     'permanent_district',
     'profession',
-    'facility_name'
+    'facility_name',
+    'case_id'
 
   ];
 
@@ -46,7 +47,8 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
     'present_district',
     'permanent_district',
     'profession',
-    'facility_name'
+    'facility_name',
+    'case_id'
   ];
 
   // Fetch people with pagination, filtering, and sorting
