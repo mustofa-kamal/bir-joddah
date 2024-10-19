@@ -12,6 +12,12 @@ interface PeopleListProps {
   limit: number;
 }
 
+const handleNameClick = (name:string) => {
+  const newWindowUrl = `/details?name=${encodeURIComponent(name)}`;
+  window.open(newWindowUrl, '_blank');
+};
+
+
 export default function PeopleList({ people, page, limit }: PeopleListProps) {
   return (
     <div>
@@ -29,7 +35,7 @@ export default function PeopleList({ people, page, limit }: PeopleListProps) {
                 {/* Responsive Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
                   {/* First Column: Image and Image Title */}
-                  <div className="text-center">
+                  <div className="text-center font-semibold text-blue-600 hover:underline mt-2 cursor-pointer" onClick={() => handleNameClick(person.name)}>
                     <Image
                       src={person.image_urls[0]}
                       alt={`Image of ${person.name}`}
@@ -38,7 +44,7 @@ export default function PeopleList({ people, page, limit }: PeopleListProps) {
                       width={100}
                       height={100}
                     />
-                    <h2 className="text-2xl font-semibold mt-2">
+                    <h2 className="text-2xl" >
                       {person.name}
                     </h2>
                   </div>
