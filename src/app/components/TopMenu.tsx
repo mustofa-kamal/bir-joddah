@@ -12,7 +12,7 @@ interface TopMenuProps {
 const TopMenu: React.FC<TopMenuProps> = ({ view, setView }) => {
     return (
         <div
-            style={{ height: '100px', width: '100%', backgroundColor: 'white', paddingLeft: '300px'}}
+            style={{ height: '100px', width: '100%', backgroundColor: 'white', paddingLeft: '100px'}}
             className="flex items-center justify-start p-4"
         >
             {/* Image acting as a button */}
