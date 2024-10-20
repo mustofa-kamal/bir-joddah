@@ -1,4 +1,3 @@
-// src/app/details/components/DetailPage.tsx
 import { useSearchParams } from 'next/navigation';
 import TopHeader from '@/app/components/TopHeader';
 import React from 'react';
@@ -15,45 +14,48 @@ const Detail: React.FC = () => {
 
   return (
     <div>
-    <TopHeader text={name ?? 'No Name Provided'} />
-    
+      <TopHeader text={name ?? 'No Name Provided'} />
 
-    <div className="container mx-auto px-1  ">
-      
-      
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+      <div className="container mx-auto px-1">
+        {/* Full-width Image (img0) with 4px top padding */}
         {img0 && (
-          <Image
-            src={img0}
-            alt={`${name}'s Image 0`}
-            width={800} // Example width for image optimization
-            height={600} // Example height for image optimization
-            className="object-cover rounded-lg"
-            layout="responsive"
-          />
+          <div className="w-full mb-4 pt-4">  {/* Added pt-1 for 4px padding at the top */}
+            <Image
+              src={img0}
+              alt={`${name}'s Image 0`}
+              width={1200}  // Explicit width
+              height={600}  // Explicit height
+              className="object-cover rounded-lg"
+            />
+          </div>
         )}
-        {img1 && (
-          <Image
-            src={img1}
-            alt={`${name}'s Image 1`}
-            width={600}
-            height={400}
-            className="object-cover rounded-lg"
-            layout="responsive"
-          />
-        )}
-        {img2 && (
-          <Image
-            src={img2}
-            alt={`${name}'s Image 2`}
-            width={600}
-            height={400}
-            className="object-cover rounded-lg"
-            layout="responsive"
-          />
-        )}
+
+        {/* Side by Side Images (img1 and img2) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {img1 && (
+            <div className="w-full">
+              <Image
+                src={img1}
+                alt={`${name}'s Image 1`}
+                width={600}  // Explicit width
+                height={400}  // Explicit height
+                className="object-cover rounded-lg"
+              />
+            </div>
+          )}
+          {img2 && (
+            <div className="w-full">
+              <Image
+                src={img2}
+                alt={`${name}'s Image 2`}
+                width={600}  // Explicit width
+                height={400}  // Explicit height
+                className="object-cover rounded-lg"
+              />
+            </div>
+          )}
+        </div>
       </div>
-    </div>
     </div>
   );
 };
