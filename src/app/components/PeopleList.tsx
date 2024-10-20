@@ -12,10 +12,32 @@ interface PeopleListProps {
   limit: number;
 }
 
-const handleNameClick = (name:string) => {
-  const newWindowUrl = `/details?name=${encodeURIComponent(name)}`;
+const handleNameClick = (person: Person) => {
+  // Debug the person object
+
+  // Base URL with the person's name
+  let newWindowUrl = `/details?name=${encodeURIComponent(person.name)}`;
+  
+  if (person.image_urls && person.image_urls.length > 0) {
+    newWindowUrl += `&img0=${encodeURIComponent(person.image_urls[0])}`;
+  }
+
+  if (person.image_urls && person.image_urls.length > 1) {
+    newWindowUrl += `&img1=${encodeURIComponent(person.image_urls[1])}`;
+  }
+
+  if (person.image_urls && person.image_urls.length > 2) {
+    newWindowUrl += `&img2=${encodeURIComponent(person.image_urls[2])}`;
+  }
+
+  
+
   window.open(newWindowUrl, '_blank');
 };
+
+
+
+
 
 
 export default function PeopleList({ people, page, limit }: PeopleListProps) {
@@ -35,7 +57,7 @@ export default function PeopleList({ people, page, limit }: PeopleListProps) {
                 {/* Responsive Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
                   {/* First Column: Image and Image Title */}
-                  <div className="text-center font-semibold text-blue-500 hover:text-blue-900 mt-2 cursor-pointer" onClick={() => handleNameClick(person.name)}>
+                  <div className="text-center font-semibold text-blue-500 hover:text-blue-900 mt-2 cursor-pointer" onClick={() => handleNameClick(person)}>
 
                     <Image
                       src={person.image_urls[0]}
