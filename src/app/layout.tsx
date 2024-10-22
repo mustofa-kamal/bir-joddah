@@ -1,35 +1,32 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
+// src/app/layout.tsx
+import './globals.css';
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
-
-export const metadata: Metadata = {
-  title: "Honoring the Courageous",
-  description: "This app honors the heroes who sacrifice their lives to help us reclaim our country",
+export const metadata = {
+  title: 'IOU',
+  description: 'Martyrs of the July-August 2024 Revolution in Bangladesh',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-8ZK5HWGD57"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-8ZK5HWGD57');
+          `,
+          }}
+        />
+      </head>
+      <body>{children}</body>
     </html>
   );
 }

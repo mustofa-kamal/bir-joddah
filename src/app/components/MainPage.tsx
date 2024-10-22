@@ -100,7 +100,7 @@ export default function MainPage({ people: initialPeople, total }: MainPageProps
 
   return (
     <div className="p-0">
-      <TopHeader text="Honoring the brave who gave their lives for our freedom with our deepest gratitude" />
+      <TopHeader text="Martyrs of the July-August 2024 Revolution in Bangladesh" />
 
       {/* Include the TopMenu component */}
       <TopMenu view={view} setView={setView} />
