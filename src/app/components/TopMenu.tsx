@@ -28,7 +28,7 @@ const TopMenu: React.FC<TopMenuProps> = ({ view, setView }) => {
                     height={50}
                     className="object-contain rounded-3xl"
                 />
-                <span className="text-blue-500 font-bold group-hover:text-blue-700">IOU</span>
+                <span className="text-blue-500 font-bold group-hover:text-blue-700">Government List</span>
             </button>
 
             {/* Analytics Button */}
